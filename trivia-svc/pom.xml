@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.glroland.trivia</groupId>
-	<artifactId>trivia</artifactId>
+	<artifactId>trivia-svc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>trivia-svc</name>
 	<description>Trivia Game</description>
@@ -21,7 +21,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
 		<dependency>
