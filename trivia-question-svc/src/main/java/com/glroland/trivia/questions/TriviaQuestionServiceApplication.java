@@ -1,4 +1,4 @@
-package com.glroland.trivia.question;
+package com.glroland.trivia.questions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

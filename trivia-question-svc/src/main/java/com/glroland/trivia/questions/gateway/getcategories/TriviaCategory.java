@@ -1,4 +1,4 @@
-package com.glroland.trivia.question.gateway.getcategories;
+package com.glroland.trivia.questions.gateway.getcategories;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

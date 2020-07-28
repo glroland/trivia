@@ -1,4 +1,4 @@
-package com.glroland.trivia.question.service;
+package com.glroland.trivia.questions.service;
 
 public class Answer {
     private String value;

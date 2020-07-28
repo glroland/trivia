@@ -1,4 +1,4 @@
-package com.glroland.trivia.question.gateway.getquestions;
+package com.glroland.trivia.questions.gateway.getquestions;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;

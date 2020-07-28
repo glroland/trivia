@@ -1,4 +1,4 @@
-package com.glroland.trivia.question.service;
+package com.glroland.trivia.questions.service;
 
 import java.util.List;
 

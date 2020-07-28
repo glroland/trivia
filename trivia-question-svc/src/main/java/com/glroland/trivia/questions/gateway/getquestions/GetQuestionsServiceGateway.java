@@ -1,4 +1,4 @@
-package com.glroland.trivia.question.gateway.getquestions;
+package com.glroland.trivia.questions.gateway.getquestions;
 
 import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Component;

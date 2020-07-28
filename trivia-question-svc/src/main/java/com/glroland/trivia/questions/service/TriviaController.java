@@ -1,4 +1,4 @@
-package com.glroland.trivia.question.service;
+package com.glroland.trivia.questions.service;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.glroland.trivia.question.gateway.getcategories.GetCategoryServiceGateway;
-import com.glroland.trivia.question.gateway.getcategories.TriviaCategories;
-import com.glroland.trivia.question.gateway.getcategories.TriviaCategory;
-import com.glroland.trivia.question.gateway.getquestions.GetQuestionsServiceGateway;
-import com.glroland.trivia.question.gateway.getquestions.TriviaQuestions;
-import com.glroland.trivia.question.gateway.getquestions.TriviaQuestion;
+import com.glroland.trivia.questions.gateway.getcategories.GetCategoryServiceGateway;
+import com.glroland.trivia.questions.gateway.getcategories.TriviaCategories;
+import com.glroland.trivia.questions.gateway.getcategories.TriviaCategory;
+import com.glroland.trivia.questions.gateway.getquestions.GetQuestionsServiceGateway;
+import com.glroland.trivia.questions.gateway.getquestions.TriviaQuestions;
+import com.glroland.trivia.questions.gateway.getquestions.TriviaQuestion;
 
 @RestController
 public class TriviaController {

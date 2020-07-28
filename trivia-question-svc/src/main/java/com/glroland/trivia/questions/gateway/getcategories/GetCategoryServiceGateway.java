@@ -1,4 +1,4 @@
-package com.glroland.trivia.question.gateway.getcategories;
+package com.glroland.trivia.questions.gateway.getcategories;
 
 import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Component;
