@@ -10,16 +10,23 @@ class PracticeGame extends Component {
         this.state = {
         };
     }
+    
+    handleSubmit(event) {
+        alert('Your favorite flavor is: ' + this.state.value);
+        event.preventDefault();
+    }
 
     render() {
         return(
-            <div>
-                <p>PracticeGame</p>
-                <br />
-                <div><GameConfig /></div>
-                <br />
-                <div><TriviaQuestion /></div>
-            </div>
+            <form onSubmit={this.handleSubmit}>
+                <div>
+                    <p>PracticeGame</p>
+                    <br />
+                    <div><GameConfig /></div>
+                    <br />
+                    <div><TriviaQuestion /></div>
+                </div>
+            </form>
         );
     }
 }

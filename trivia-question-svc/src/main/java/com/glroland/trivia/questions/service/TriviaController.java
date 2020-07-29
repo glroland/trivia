@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.glroland.trivia.questions.gateway.getcategories.GetCategoryServiceGateway;
 import com.glroland.trivia.questions.gateway.getcategories.TriviaCategories;
@@ -28,6 +29,7 @@ public class TriviaController {
 	private GetQuestionsServiceGateway getQuestionsServiceGateway;
 
     @GetMapping("/categories")
+    @CrossOrigin(origins = "*")
     public List<Category> categories()
     {
         TriviaCategories triviaCategories = getCategoryServiceGateway.getTriviaCategories();
@@ -48,6 +50,7 @@ public class TriviaController {
     }
 
     @GetMapping("/questions")
+    @CrossOrigin(origins = "*")
     public List<Question> questions(@RequestParam(value = "categoryId") int categoryId, @RequestParam(value = "numQuestions", defaultValue = "10") int numQuestions)
     {
         TriviaQuestions triviaQuestions = getQuestionsServiceGateway.getTriviaQuestions(categoryId, numQuestions);
