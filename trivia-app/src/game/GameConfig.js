@@ -8,15 +8,17 @@ class GameConfig extends Component {
         this.state = {
             error: null,
             categoryId: 0,
-            difficulty: null,
+            difficulty: "",
             categories: [],
             questions: []
         };
     }
   
     handleChange_selectCategory = (event) => {
-        this.setState({ categoryId: event.target.value })
-        this.refreshQuestions();
+        let categoryId = parseInt(event.target.value);
+        console.log("Category ID Changed From(" + this.state.categoryId + ") to (" + event.target.value + ")");
+        this.setState({ categoryId: categoryId })
+        this.refreshQuestions(categoryId);
     }
   
     invokeGetCategories() {
@@ -28,22 +30,30 @@ class GameConfig extends Component {
         .catch(console.log);
     }
 
-    invokeGetQuestions() {
-        fetch('http://localhost:8080/questions?categoryId=' + this.state.categoryId)
+    invokeGetQuestions(categoryId) {
+        let url = 'http://localhost:8080/questions';
+        if ((categoryId !== undefined) && (categoryId > 0))
+            url = url + '?categoryId=' + categoryId;
+        
+        console.log("Invoking Get Questions Service = " + url);
+        fetch(url)
         .then(res => res.json())
         .then((data) => {
           this.setState({ questions: data })
+          console.log(data);
         })
         .catch(console.log);
     }
 
-    refreshQuestions() {
-        this.invokeGetQuestions();
-        console.log(this.state.questions);
+    refreshQuestions(categoryId) {
+        console.log("Refreshing Question List for Category = " + categoryId);
+        this.invokeGetQuestions(categoryId);
     }
 
     componentDidMount() {
         this.invokeGetCategories();
+
+        this.refreshQuestions();
     }
    
     createCategoryListOptions() {
@@ -62,6 +72,7 @@ class GameConfig extends Component {
                 <label>
                     Category:
                     <select value={this.state.categoryId} onChange={this.handleChange_selectCategory}>
+                        <option key={0} value={0}></option>
                         {this.createCategoryListOptions()}
                     </select>
                 </label>

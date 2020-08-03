@@ -51,7 +51,7 @@ public class TriviaController {
 
     @GetMapping("/questions")
     @CrossOrigin(origins = "*")
-    public List<Question> questions(@RequestParam(value = "categoryId") int categoryId, @RequestParam(value = "numQuestions", defaultValue = "10") int numQuestions)
+    public List<Question> questions(@RequestParam(value = "categoryId", defaultValue = "0") int categoryId, @RequestParam(value = "numQuestions", defaultValue = "10") int numQuestions)
     {
         TriviaQuestions triviaQuestions = getQuestionsServiceGateway.getTriviaQuestions(categoryId, numQuestions);
 

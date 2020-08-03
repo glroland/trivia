@@ -17,9 +17,13 @@ public class GetQuestionsServiceGateway
 
         UriComponentsBuilder builder = UriComponentsBuilder
             .fromUriString(url)
-            .queryParam("category", Integer.toString(categoryId))
             .queryParam("type", "multiple")
             .queryParam("amount", Integer.toString(numQuestions));
+
+        if (categoryId > 0)
+        {
+            builder.queryParam("category", Integer.toString(categoryId));
+        }
 
         TriviaQuestions triviaCategories = restTemplate.getForObject(
             builder.toUriString(), TriviaQuestions.class);
