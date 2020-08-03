@@ -7,17 +7,19 @@ class GameConfig extends Component {
         super(props);
         this.state = {
             error: null,
-            categoryId: null,
+            categoryId: 0,
             difficulty: null,
-            categories: []
+            categories: [],
+            questions: []
         };
     }
   
-    handleChange(event) {
-        this.setState({value: event.target.value});
+    handleChange_selectCategory = (event) => {
+        this.setState({ categoryId: event.target.value })
+        this.refreshQuestions();
     }
   
-    componentDidMount() {
+    invokeGetCategories() {
         fetch('http://localhost:8080/categories')
         .then(res => res.json())
         .then((data) => {
@@ -25,11 +27,27 @@ class GameConfig extends Component {
         })
         .catch(console.log);
     }
+
+    invokeGetQuestions() {
+        fetch('http://localhost:8080/questions?categoryId=' + this.state.categoryId)
+        .then(res => res.json())
+        .then((data) => {
+          this.setState({ questions: data })
+        })
+        .catch(console.log);
+    }
+
+    refreshQuestions() {
+        this.invokeGetQuestions();
+        console.log(this.state.questions);
+    }
+
+    componentDidMount() {
+        this.invokeGetCategories();
+    }
    
     createCategoryListOptions() {
         let items = [];
-        console.log(this.state.categories);
-        console.log(this.state.categories.length);
         for (let i = 0; i < this.state.categories.length; i++)
         {
             items.push(<option key={this.state.categories[i].id} value={this.state.categories[i].id}>{this.state.categories[i].name}</option>); 
@@ -43,14 +61,14 @@ class GameConfig extends Component {
                 <p>GameConfig</p>
                 <label>
                     Category:
-                    <select value={this.state.categoryId} onChange={this.handleChange}>
+                    <select value={this.state.categoryId} onChange={this.handleChange_selectCategory}>
                         {this.createCategoryListOptions()}
                     </select>
                 </label>
                 <br/>
                 <label>
                     Difficulty:
-                    <select value={this.state.difficulty} onChange={this.handleChange}>
+                    <select value={this.state.difficulty} onChange={() => this.handleChange()}>
                         <option key="" value=""></option>
                         <option key="easy" value="easy">Easy</option>
                         <option key="medium" value="medium">Medium</option>
