@@ -6,19 +6,32 @@ class GameConfig extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            error: null,
             categoryId: 0,
             difficulty: "",
-            categories: [],
-            questions: []
+            categories: []
         };
+
+        this.eventSync_onChange = props.onChange;
     }
   
+    async fireChangeListeners(categoryId, difficulty) {
+        this.eventSync_onChange(categoryId, difficulty);
+    }
+
     handleChange_selectCategory = (event) => {
         let categoryId = parseInt(event.target.value);
-        console.log("Category ID Changed From(" + this.state.categoryId + ") to (" + event.target.value + ")");
+        console.log("Category ID Changed From (" + this.state.categoryId + ") to (" + event.target.value + ")");
         this.setState({ categoryId: categoryId })
-        this.refreshQuestions(categoryId);
+
+        this.fireChangeListeners(categoryId, this.state.difficulty);
+    }
+
+    handleChange_selectDifficulty = (event) => {
+        let difficulty = event.target.value;
+        console.log("Difficulty Changed From (" + this.state.difficulty + ") to (" + event.target.value + ")");
+        this.setState({ difficulty: difficulty });
+
+        this.fireChangeListeners(this.state.categoryId, difficulty);
     }
   
     invokeGetCategories() {
@@ -30,30 +43,14 @@ class GameConfig extends Component {
         .catch(console.log);
     }
 
-    invokeGetQuestions(categoryId) {
-        let url = 'http://localhost:8080/questions';
-        if ((categoryId !== undefined) && (categoryId > 0))
-            url = url + '?categoryId=' + categoryId;
-        
-        console.log("Invoking Get Questions Service = " + url);
-        fetch(url)
-        .then(res => res.json())
-        .then((data) => {
-          this.setState({ questions: data })
-          console.log(data);
-        })
-        .catch(console.log);
-    }
+    async refreshCategories() {
+        await this.invokeGetCategories();
 
-    refreshQuestions(categoryId) {
-        console.log("Refreshing Question List for Category = " + categoryId);
-        this.invokeGetQuestions(categoryId);
+        this.fireChangeListeners();
     }
 
     componentDidMount() {
-        this.invokeGetCategories();
-
-        this.refreshQuestions();
+        this.refreshCategories();
     }
    
     createCategoryListOptions() {
@@ -68,7 +65,7 @@ class GameConfig extends Component {
     render() {
         return(
             <div>
-                <p>GameConfig</p>
+                <p>Config</p>
                 <label>
                     Category:
                     <select value={this.state.categoryId} onChange={this.handleChange_selectCategory}>
@@ -79,7 +76,7 @@ class GameConfig extends Component {
                 <br/>
                 <label>
                     Difficulty:
-                    <select value={this.state.difficulty} onChange={() => this.handleChange()}>
+                    <select value={this.state.difficulty} onChange={() => this.handleChange_selectDifficulty}>
                         <option key="" value=""></option>
                         <option key="easy" value="easy">Easy</option>
                         <option key="medium" value="medium">Medium</option>

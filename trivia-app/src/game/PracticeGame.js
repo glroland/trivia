@@ -8,25 +8,59 @@ class PracticeGame extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            questions: []
         };
-    }
-    
-    handleSubmit(event) {
-        alert('Your favorite flavor is: ' + this.state.value);
-        event.preventDefault();
+
+        this.gameConfigRef = React.createRef();
     }
 
+    handleChange_gameConfig = (categoryId, difficulty) => {
+        console.log("Game Config Changed - Category = (" + categoryId + "), Difficulty = (" + difficulty + ")");
+
+        this.refreshQuestions(categoryId, difficulty);
+    }
+
+    invokeGetQuestions(categoryId) {
+        let url = 'http://localhost:8080/questions';
+        if ((categoryId !== undefined) && (categoryId > 0))
+            url = url + '?categoryId=' + categoryId;
+        
+        console.log("Invoking Get Questions Service = " + url);
+        fetch(url)
+        .then(res => res.json())
+        .then((data) => {
+          this.setState({ questions: data })
+          console.log(data);
+        })
+        .catch(console.log);
+    }
+
+    async refreshQuestions(categoryId, difficulty) {
+        console.log("Refreshing Question List for Category = (" + categoryId + "), Difficulty = (" + difficulty + ")");
+        await this.invokeGetQuestions(categoryId);
+
+        this.forceUpdate();
+    }
+
+    renderQuestion() {
+        console.log("Number of Questions - " + this.state.questions.length);
+        console.log(this.state.questions[0]);
+        if (this.state.questions[0] !== undefined) {
+            console.log(this.state.questions[0].difficulty);
+            return <TriviaQuestion difficulty={this.state.questions[0].difficulty} 
+                                   question={this.state.questions[0].question} 
+                                   answers={this.state.questions[0].answers} />;    
+        }
+    }
     render() {
         return(
-            <form onSubmit={this.handleSubmit}>
-                <div>
-                    <p>PracticeGame</p>
-                    <br />
-                    <div><GameConfig /></div>
-                    <br />
-                    <div><TriviaQuestion /></div>
-                </div>
-            </form>
+            <div>
+                <p>Practice</p>
+                <br />
+                <div><GameConfig ref={this.gameConfigRef} onChange={this.handleChange_gameConfig} /></div>
+                <br />
+                <div>{ this.renderQuestion() }</div>
+            </div>
         );
     }
 }
