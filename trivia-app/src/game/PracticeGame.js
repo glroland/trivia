@@ -42,16 +42,30 @@ class PracticeGame extends Component {
         this.forceUpdate();
     }
 
-    renderQuestion() {
+    renderQuestion(index, question) {
         console.log("Number of Questions - " + this.state.questions.length);
         console.log(this.state.questions[0]);
-        if (this.state.questions[0] !== undefined) {
+        if (question !== undefined) {
             console.log(this.state.questions[0].difficulty);
-            return <TriviaQuestion difficulty={this.state.questions[0].difficulty} 
-                                   question={this.state.questions[0].question} 
-                                   answers={this.state.questions[0].answers} />;    
+            return <TriviaQuestion id={index}
+                                   difficulty={question.difficulty} 
+                                   question={question.question} 
+                                   answers={question.answers} />;    
         }
     }
+
+    renderQuestionList() {
+        let questionList = [];
+        if (this.state.questions !== undefined) {
+            for (let i = 0; i < this.state.questions.length; i++)
+            {
+                questionList.push(<div>{ this.renderQuestion(i, this.state.questions[i]) }</div>); 
+            }
+        }
+        return questionList;
+
+    }
+
     render() {
         return(
             <div>
@@ -59,7 +73,7 @@ class PracticeGame extends Component {
                 <br />
                 <div><GameConfig ref={this.gameConfigRef} onChange={this.handleChange_gameConfig} /></div>
                 <br />
-                <div>{ this.renderQuestion() }</div>
+                <div>{ this.renderQuestionList() }</div>
             </div>
         );
     }

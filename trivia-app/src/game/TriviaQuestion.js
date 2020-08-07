@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import TriviaQuestionAnswer from "./TriviaQuestionAnswer.js";
 import "../App.css";
 
 class TriviaQuestion extends Component {
@@ -8,11 +9,19 @@ class TriviaQuestion extends Component {
         this.state = {
             difficulty: props.difficulty,
             question: props.question,
-            answers: props.answers
+            answers: props.answers,
+            id: props.id,
+            questionClean: this.decodeHtmlEntity(props.question)
         };
 
-        console.log("Trivia Question - Difficulty='" + props.difficulty + "' Question='" + props.question + "'");
+        console.log("Trivia Question - ID=" + props.id + " Difficulty='" + props.difficulty + "' Question='" + props.question + "'");
     }
+
+    decodeHtmlEntity = function(str) {
+        return str.replace(/&(\w+);/g, function(match, dec) {
+          return String.fromCharCode(dec);
+        });
+      };
 
     onChange = (event) => {
         let index = parseInt(event.target.value);
@@ -27,7 +36,8 @@ class TriviaQuestion extends Component {
 
         let numAnswers = this.state.answers.length;
         for (var i = 0; i < numAnswers; i++) {
-            answers.push(<div><input type="radio" value={i} name="answer" /> {this.state.answers[i].value}</div>);
+            let id = "TQA_" + this.state.id;
+            answers.push(<TriviaQuestionAnswer questionId={this.state.id} answerId={i} answer={this.state.answers[i].value} />);
         }
 
         return answers;
@@ -37,7 +47,8 @@ class TriviaQuestion extends Component {
         return(
             <div>
                 <p><b>Question:</b></p>
-                <p>{this.state.question}</p>
+                <p>{ this.state.question }</p>
+                <p>{ this.state.questionClean }</p>
                 <div onChange={this.onChange}>
                     {this.renderAnswers()}
                 </div>
