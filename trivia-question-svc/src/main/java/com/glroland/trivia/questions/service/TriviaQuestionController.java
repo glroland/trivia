@@ -18,9 +18,9 @@ import com.glroland.trivia.questions.gateway.getquestions.TriviaQuestions;
 import com.glroland.trivia.questions.gateway.getquestions.TriviaQuestion;
 
 @RestController
-public class TriviaController {
+public class TriviaQuestionController {
 
-	private static final Logger log = LoggerFactory.getLogger(TriviaController.class);
+	private static final Logger log = LoggerFactory.getLogger(TriviaQuestionController.class);
 
 	@Autowired
 	private GetCategoryServiceGateway getCategoryServiceGateway;
