@@ -11,6 +11,7 @@ public class Player {
     private String name;
     private String email;
     private Date createDateTime;
+    private Date updateDateTime;
     
     public Player()
     {
@@ -45,7 +46,11 @@ public class Player {
         return createDateTime;
     }
 
-    public void setCreateDateTime(Date createDateTime) {
-        this.createDateTime = createDateTime;
+    public Date getUpdateDateTime() {
+        return updateDateTime;
     }
+
+    public void setUpdateDateTime(Date updateDateTime) {
+        this.updateDateTime = updateDateTime;
+    }    
 }
