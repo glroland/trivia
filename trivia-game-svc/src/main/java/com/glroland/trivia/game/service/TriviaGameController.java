@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.glroland.trivia.game.entities.Player;
+import com.glroland.trivia.game.entities.Game;
 import com.glroland.trivia.game.data.PlayerRepository;
+import com.glroland.trivia.game.data.GameRepository;
 
 @RestController
 public class TriviaGameController {
@@ -19,6 +21,9 @@ public class TriviaGameController {
     @Autowired
     private PlayerRepository playerRepository;
 
+    @Autowired
+    private GameRepository gameRepository;
+
     @GetMapping("/purge")
     @CrossOrigin(origins = "*")
     public void purge()
@@ -27,9 +32,9 @@ public class TriviaGameController {
         playerRepository.deleteAll();
     }
 
-    @GetMapping("/newGame")
+    @GetMapping("/joinNewGame")
     @CrossOrigin(origins = "*")
-    public void newGame(String playerId)
+    public void joinNewGame(String playerId)
     {
 
     }
@@ -96,5 +101,23 @@ public class TriviaGameController {
 
         log.info("Player Sign In!  Name=" + name + " Email=" + cleanEmail + " ID=" + player.getId());
         return player.getId();
+    }
+
+    @GetMapping("/games")
+    @CrossOrigin(origins = "*")
+    public List<Game> getGamesForPlayer(String playerId)
+    {
+        // validate arguments
+        if ((playerId == null) || (playerId.length() == 0))
+        {
+            String msg = "Input player ID passed into get games for player is empty or null!";
+            log.error(msg);
+            throw new IllegalArgumentException(msg);
+        }
+
+        if(log.isDebugEnabled())
+            log.debug("Getting games for Player!  playerID=" + playerId);
+
+        return gameRepository.findByPlayers(playerId);
     }
 }
