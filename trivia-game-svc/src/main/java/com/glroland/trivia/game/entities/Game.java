@@ -11,6 +11,8 @@ public class Game {
 
     private List<Player> players;
     private Date createDateTime;
+    private Date endDate;
+    private GameStatusEnum status;
     
     public Game()
     {
@@ -40,4 +42,20 @@ public class Game {
     public void setCreateDateTime(Date createDateTime) {
         this.createDateTime = createDateTime;
     }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public GameStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(GameStatusEnum status) {
+        this.status = status;
+    }    
 }
