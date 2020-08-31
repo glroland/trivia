@@ -12,8 +12,9 @@ public class Lobby {
     private Map<String, Date> players;
     private Date createDateTime;
     private long timeWindow;
-    private int numPlayers;
+    private int idealPlayerCount;
     private LobbyStatusEnum status;
+    private String gameId;
     
     public Lobby()
     {
@@ -44,14 +45,14 @@ public class Lobby {
         this.timeWindow = timeWindow;
     }
 
-    public int getNumPlayers() {
-        return numPlayers;
+    public int getIdealPlayerCount() {
+        return idealPlayerCount;
     }
 
-    public void setNumPlayers(int numPlayers) {
-        this.numPlayers = numPlayers;
+    public void setIdealPlayerCount(int idealPlayerCount) {
+        this.idealPlayerCount = idealPlayerCount;
     }
-
+    
     public LobbyStatusEnum getStatus() {
         return status;
     }
@@ -68,4 +69,11 @@ public class Lobby {
         this.createDateTime = createDateTime;
     }
 
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
+    }
 }
