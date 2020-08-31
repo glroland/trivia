@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.glroland.trivia.gamemaster.entities.Player;
 import com.glroland.trivia.gamemaster.entities.Game;
+import com.glroland.trivia.gamemaster.entities.Lobby;
 import com.glroland.trivia.gamemaster.data.PlayerRepository;
 import com.glroland.trivia.gamemaster.data.GameRepository;
+import com.glroland.trivia.gamemaster.data.LobbyRepository;
 
 @RestController
 public class TriviaGameMasterController {
@@ -24,19 +26,17 @@ public class TriviaGameMasterController {
     @Autowired
     private GameRepository gameRepository;
 
+    @Autowired
+    private LobbyRepository lobbyRepository;
+
     @GetMapping("/purge")
     @CrossOrigin(origins = "*")
     public void purge()
     {
-        log.warn("Purging entire database.  Fun times!");
+        log.warn("Purging all managed types from databases.  Fun times!");
+        gameRepository.deleteAll();
+        lobbyRepository.deleteAll();
         playerRepository.deleteAll();
-    }
-
-    @GetMapping("/joinNewGame")
-    @CrossOrigin(origins = "*")
-    public void joinNewGame(String playerId)
-    {
-
     }
 
     @GetMapping("/signin")
@@ -101,6 +101,13 @@ public class TriviaGameMasterController {
 
         log.info("Player Sign In!  Name=" + name + " Email=" + cleanEmail + " ID=" + player.getId());
         return player.getId();
+    }
+
+    @GetMapping("/lobby")
+    @CrossOrigin(origins = "*")
+    public Lobby updateLobby(String playerId)
+    {
+        return null;
     }
 
     @GetMapping("/games")
