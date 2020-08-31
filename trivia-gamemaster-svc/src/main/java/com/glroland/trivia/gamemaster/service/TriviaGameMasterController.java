@@ -1,4 +1,4 @@
-package com.glroland.trivia.game.service;
+package com.glroland.trivia.gamemaster.service;
 
 import java.util.Date;
 import java.util.List;
@@ -8,15 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.glroland.trivia.game.entities.Player;
-import com.glroland.trivia.game.entities.Game;
-import com.glroland.trivia.game.data.PlayerRepository;
-import com.glroland.trivia.game.data.GameRepository;
+import com.glroland.trivia.gamemaster.entities.Player;
+import com.glroland.trivia.gamemaster.entities.Game;
+import com.glroland.trivia.gamemaster.data.PlayerRepository;
+import com.glroland.trivia.gamemaster.data.GameRepository;
 
 @RestController
-public class TriviaGameController {
+public class TriviaGameMasterController {
     
-    private static final Logger log = LoggerFactory.getLogger(TriviaGameController.class);
+    private static final Logger log = LoggerFactory.getLogger(TriviaGameMasterController.class);
     
     @Autowired
     private PlayerRepository playerRepository;

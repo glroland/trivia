@@ -1,10 +1,10 @@
-package com.glroland.trivia.game;
+package com.glroland.trivia.gamemaster;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TriviaGameSvcApplicationTests {
+class TriviaGameMasterServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

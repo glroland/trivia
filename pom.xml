@@ -21,7 +21,7 @@
 
 	<modules>
 		<module>trivia-question-svc</module>
-		<module>trivia-game-svc</module>
+		<module>trivia-gamemaster-svc</module>
 	</modules>
 
 </project>

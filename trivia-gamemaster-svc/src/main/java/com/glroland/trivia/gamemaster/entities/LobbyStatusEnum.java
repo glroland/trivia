@@ -1,4 +1,4 @@
-package com.glroland.trivia.game.entities;
+package com.glroland.trivia.gamemaster.entities;
 
 public enum LobbyStatusEnum {
     

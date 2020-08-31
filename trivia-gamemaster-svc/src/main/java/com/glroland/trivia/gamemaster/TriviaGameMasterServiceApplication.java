@@ -1,4 +1,4 @@
-package com.glroland.trivia.game;
+package com.glroland.trivia.gamemaster;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,12 +9,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-public class TriviaGameServiceApplication {
+public class TriviaGameMasterServiceApplication {
 
-	private static final Logger log = LoggerFactory.getLogger(TriviaGameServiceApplication.class);
+	private static final Logger log = LoggerFactory.getLogger(TriviaGameMasterServiceApplication.class);
 
 	public static void main(String[] args) {
-		SpringApplication.run(TriviaGameServiceApplication.class, args);
+		SpringApplication.run(TriviaGameMasterServiceApplication.class, args);
 	}
 
 	@Bean

@@ -9,9 +9,9 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>com.glroland.trivia</groupId>
-	<artifactId>trivia-game-svc</artifactId>
+	<artifactId>trivia-gamemaster-svc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>trivia-game-svc</name>
+	<name>trivia-gamemaster-svc</name>
 	<description>Trivia Game Controller Service</description>
 
 	<properties>
