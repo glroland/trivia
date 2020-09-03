@@ -2,7 +2,10 @@ package com.glroland.trivia.gamemaster.entities;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Calendar;
 import org.springframework.data.annotation.Id;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Lobby {
     
@@ -18,7 +21,7 @@ public class Lobby {
     
     public Lobby()
     {
-        createDateTime = new Date();
+        createDateTime = Calendar.getInstance().getTime();
     }
 
     public String getId() {
@@ -52,7 +55,7 @@ public class Lobby {
     public void setIdealPlayerCount(int idealPlayerCount) {
         this.idealPlayerCount = idealPlayerCount;
     }
-    
+
     public LobbyStatusEnum getStatus() {
         return status;
     }
@@ -75,5 +78,17 @@ public class Lobby {
 
     public void setGameId(String gameId) {
         this.gameId = gameId;
+    }
+
+    public String toString() {
+        ObjectMapper mapper = new ObjectMapper();
+        try
+        {
+            return mapper.writeValueAsString(this);
+        }
+        catch(JsonProcessingException e)
+        {
+            throw new RuntimeException("Caught exception while trying to convert object to json string for debugging purposes", e);
+        }
     }
 }

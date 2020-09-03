@@ -1,5 +1,10 @@
 # trivia
 
+http://localhost:8080/purge
+
+http://localhost:8080/signin?name=Lee&email=glroland@hotmail.com
+
+
 
 
 Dependencies:

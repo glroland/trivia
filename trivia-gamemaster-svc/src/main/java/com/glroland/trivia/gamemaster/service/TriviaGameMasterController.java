@@ -2,6 +2,8 @@ package com.glroland.trivia.gamemaster.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.glroland.trivia.gamemaster.entities.Player;
 import com.glroland.trivia.gamemaster.entities.Game;
 import com.glroland.trivia.gamemaster.entities.Lobby;
+import com.glroland.trivia.gamemaster.entities.LobbyStatusEnum;
 import com.glroland.trivia.gamemaster.data.PlayerRepository;
 import com.glroland.trivia.gamemaster.data.GameRepository;
 import com.glroland.trivia.gamemaster.data.LobbyRepository;
@@ -107,6 +110,54 @@ public class TriviaGameMasterController {
     @CrossOrigin(origins = "*")
     public Lobby updateLobby(String playerId)
     {
+        // validate arguments
+        if ((playerId == null) || (playerId.length() == 0))
+        {
+            String msg = "Input player ID passed into update lobby is empty or null!";
+            log.error(msg);
+            throw new IllegalArgumentException(msg);
+        }
+        
+        log.info("Update Lobby Called!  PlayerId=" + playerId);
+
+        List<Lobby> allLobbies = lobbyRepository.findAll();
+        log.info("# of Lobbies in system = " + allLobbies.size());
+        int index = 0;
+        for(Lobby lobby : allLobbies)
+        {
+            log.info("Lobby [" + index + "] - " + lobby.toString());
+        }
+
+        
+        // attempt to find
+        List<Lobby> lobbies = lobbyRepository.findByPlayerAndStatus(playerId, LobbyStatusEnum.Open);
+        if ((lobbies == null) || (lobbies.size() == 0))
+        {
+            log.info("No matching lobbies found at all.  Creating!");
+
+            // no lobby found, so create one
+            Lobby lobby = new Lobby();
+            lobby.setTimeWindow(60);    // one minute
+            lobby.setIdealPlayerCount(2);
+            lobby.setStatus(LobbyStatusEnum.Open);
+            Map<String, Date> players = new HashMap<String, Date>();
+            players.put(playerId, new Date());
+            lobby.setPlayers(players);
+            lobbyRepository.save(lobby);
+        }
+        else
+        {
+            log.info("Found lobbies - looking for player registration.  Size=" + lobbies.size());
+
+            // update existing lobby
+            Lobby lobby = lobbies.get(0);
+            Map<String, Date> players = lobby.getPlayers();
+            for (int i=0; i<players.size(); i++)
+            {
+                
+            }
+        }
+
         return null;
     }
 
