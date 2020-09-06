@@ -1,7 +1,7 @@
 package com.glroland.trivia.gamemaster.entities;
 
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 import java.util.Calendar;
 import org.springframework.data.annotation.Id;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,7 +12,7 @@ public class Lobby {
     @Id
     private String id;
 
-    private Map<String, Date> players;
+    private List<LobbyPlayer> players;
     private Date createDateTime;
     private long timeWindow;
     private int idealPlayerCount;
@@ -32,11 +32,11 @@ public class Lobby {
         this.id = id;
     }
 
-    public Map<String, Date> getPlayers() {
+    public List<LobbyPlayer> getPlayers() {
         return players;
     }
 
-    public void setPlayers(Map<String, Date> players) {
+    public void setPlayers(List<LobbyPlayer> players) {
         this.players = players;
     }
 

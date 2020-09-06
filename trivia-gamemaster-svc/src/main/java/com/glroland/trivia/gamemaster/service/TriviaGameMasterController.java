@@ -2,17 +2,20 @@ package com.glroland.trivia.gamemaster.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import com.glroland.trivia.gamemaster.entities.Player;
 import com.glroland.trivia.gamemaster.entities.Game;
 import com.glroland.trivia.gamemaster.entities.Lobby;
+import com.glroland.trivia.gamemaster.entities.LobbyPlayer;
 import com.glroland.trivia.gamemaster.entities.LobbyStatusEnum;
 import com.glroland.trivia.gamemaster.data.PlayerRepository;
 import com.glroland.trivia.gamemaster.data.GameRepository;
@@ -34,6 +37,7 @@ public class TriviaGameMasterController {
 
     @GetMapping("/purge")
     @CrossOrigin(origins = "*")
+    @Transactional
     public void purge()
     {
         log.warn("Purging all managed types from databases.  Fun times!");
@@ -44,6 +48,7 @@ public class TriviaGameMasterController {
 
     @GetMapping("/signin")
     @CrossOrigin(origins = "*")
+    @Transactional
     public String signin(String name, String email)
     {
         // validate arguments
@@ -108,6 +113,7 @@ public class TriviaGameMasterController {
 
     @GetMapping("/lobby")
     @CrossOrigin(origins = "*")
+    @Transactional
     public Lobby updateLobby(String playerId)
     {
         // validate arguments
@@ -123,12 +129,13 @@ public class TriviaGameMasterController {
         List<Lobby> allLobbies = lobbyRepository.findAll();
         log.info("# of Lobbies in system = " + allLobbies.size());
         int index = 0;
-        for(Lobby lobby : allLobbies)
+        for(Lobby logLobby : allLobbies)
         {
-            log.info("Lobby [" + index + "] - " + lobby.toString());
+            log.info("Lobby [" + index + "] - " + logLobby.toString());
         }
 
-        
+        Lobby lobby = null;
+
         // attempt to find
         List<Lobby> lobbies = lobbyRepository.findByPlayerAndStatus(playerId, LobbyStatusEnum.Open);
         if ((lobbies == null) || (lobbies.size() == 0))
@@ -136,12 +143,15 @@ public class TriviaGameMasterController {
             log.info("No matching lobbies found at all.  Creating!");
 
             // no lobby found, so create one
-            Lobby lobby = new Lobby();
+            lobby = new Lobby();
             lobby.setTimeWindow(60);    // one minute
             lobby.setIdealPlayerCount(2);
             lobby.setStatus(LobbyStatusEnum.Open);
-            Map<String, Date> players = new HashMap<String, Date>();
-            players.put(playerId, new Date());
+            List<LobbyPlayer> players = new ArrayList<LobbyPlayer>();
+            LobbyPlayer lobbyPlayer = new LobbyPlayer();
+            lobbyPlayer.setPlayerId(playerId);
+            lobbyPlayer.setLastCheckIn(Calendar.getInstance().getTime());
+            players.add(lobbyPlayer);
             lobby.setPlayers(players);
             lobbyRepository.save(lobby);
         }
@@ -150,19 +160,20 @@ public class TriviaGameMasterController {
             log.info("Found lobbies - looking for player registration.  Size=" + lobbies.size());
 
             // update existing lobby
-            Lobby lobby = lobbies.get(0);
-            Map<String, Date> players = lobby.getPlayers();
+            lobby = lobbies.get(0);
+            List<LobbyPlayer> players = lobby.getPlayers();
             for (int i=0; i<players.size(); i++)
             {
                 
             }
         }
 
-        return null;
+        return lobby;
     }
 
     @GetMapping("/games")
     @CrossOrigin(origins = "*")
+    @Transactional
     public List<Game> getGamesForPlayer(String playerId)
     {
         // validate arguments
