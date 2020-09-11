@@ -14,7 +14,8 @@ public class Lobby {
 
     private List<LobbyPlayer> players;
     private Date createDateTime;
-    private long timeWindow;
+    private Date expireDateTime;
+    private Date closeDateTime;
     private int idealPlayerCount;
     private LobbyStatusEnum status;
     private String gameId;
@@ -40,13 +41,13 @@ public class Lobby {
         this.players = players;
     }
 
-    public long getTimeWindow() {
-        return timeWindow;
+    public Date getExpireDateTime() {
+        return expireDateTime;
     }
 
-    public void setTimeWindow(long timeWindow) {
-        this.timeWindow = timeWindow;
-    }
+    public void setExpireDateTime(Date expireDateTime) {
+        this.expireDateTime = expireDateTime;
+    }    
 
     public int getIdealPlayerCount() {
         return idealPlayerCount;
@@ -72,6 +73,14 @@ public class Lobby {
         this.createDateTime = createDateTime;
     }
 
+    public Date getCloseDateTime() {
+        return closeDateTime;
+    }
+
+    public void setCloseDateTime(Date closeDateTime) {
+        this.closeDateTime = closeDateTime;
+    }
+
     public String getGameId() {
         return gameId;
     }
@@ -90,5 +99,5 @@ public class Lobby {
         {
             throw new RuntimeException("Caught exception while trying to convert object to json string for debugging purposes", e);
         }
-    }
+    }    
 }

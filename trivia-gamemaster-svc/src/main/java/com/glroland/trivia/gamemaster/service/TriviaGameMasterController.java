@@ -2,6 +2,7 @@ package com.glroland.trivia.gamemaster.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.glroland.trivia.gamemaster.entities.Player;
 import com.glroland.trivia.gamemaster.entities.Game;
+import com.glroland.trivia.gamemaster.entities.GameStatusEnum;
 import com.glroland.trivia.gamemaster.entities.Lobby;
 import com.glroland.trivia.gamemaster.entities.LobbyPlayer;
 import com.glroland.trivia.gamemaster.entities.LobbyStatusEnum;
@@ -144,15 +146,22 @@ public class TriviaGameMasterController {
 
             // no lobby found, so create one
             lobby = new Lobby();
-            lobby.setTimeWindow(60);    // one minute
             lobby.setIdealPlayerCount(2);
             lobby.setStatus(LobbyStatusEnum.Open);
+
+            // set expiration time
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MINUTE, 1);
+            lobby.setExpireDateTime(cal.getTime());
+
+            // add requesting player
             List<LobbyPlayer> players = new ArrayList<LobbyPlayer>();
             LobbyPlayer lobbyPlayer = new LobbyPlayer();
             lobbyPlayer.setPlayerId(playerId);
             lobbyPlayer.setLastCheckIn(Calendar.getInstance().getTime());
             players.add(lobbyPlayer);
             lobby.setPlayers(players);
+
             lobbyRepository.save(lobby);
         }
         else
@@ -188,5 +197,112 @@ public class TriviaGameMasterController {
             log.debug("Getting games for Player!  playerID=" + playerId);
 
         return gameRepository.findByPlayers(playerId);
+    }
+
+    @GetMapping("/clearLobbies")
+    @CrossOrigin(origins = "*")
+    @Transactional
+    public void clearLobbies()
+    {
+        List<Lobby> openLobbies = lobbyRepository.findByStatus(LobbyStatusEnum.Open);
+        if (openLobbies != null)
+        {
+            Date now = Calendar.getInstance().getTime();
+            for (Lobby openLobby : openLobbies) 
+            {
+                if (now.after(openLobby.getExpireDateTime()))
+                {
+                    this.closeLobby(openLobby.getId());
+                }
+            }
+        }
+    }
+
+    @GetMapping("/closeLobby")
+    @CrossOrigin(origins = "*")
+    @Transactional
+    public void closeLobby(String lobbyId)
+    {
+        // validate arguments
+        if ((lobbyId == null) || (lobbyId.length() == 0))
+        {
+            String msg = "Lobby ID passed to close lobby is empty or null";
+            log.error(msg);
+            throw new IllegalArgumentException(msg);
+        }
+
+        log.info("Closing Lobby: " + lobbyId);
+
+        // retrieve lobby
+        Optional<Lobby> optionalLobby = lobbyRepository.findById(lobbyId);
+        if (!optionalLobby.isPresent())
+        {
+            String msg = "Cannot close non-existent lobby!  ID=" + lobbyId;
+            log.error(msg);
+            throw new RuntimeException(msg);
+        }
+        Lobby lobby = optionalLobby.get();
+
+        // validate that lobby is currently open
+        if (lobby.getStatus() != LobbyStatusEnum.Open)
+        {
+            String msg = "Cannot close lobby that isn't currently open!  ID=" + lobbyId + " Status=" + lobby.getStatus();
+            log.error(msg);
+            throw new RuntimeException(msg);
+        }
+
+        // create game for lobby
+        Game game = createGameForLobby(lobby);
+        if (game == null)
+        {
+            String msg = "No game was able to be created for lobby!  LobbyID= " + lobbyId;
+            log.error(msg);
+            throw new RuntimeException(msg);
+        }
+
+        // update lobby
+        lobby.setStatus(LobbyStatusEnum.Closed);
+        lobby.setGameId(game.getId());
+        lobby.setCloseDateTime(Calendar.getInstance().getTime());
+        lobbyRepository.save(lobby);
+    }
+
+    private Game createGameForLobby(Lobby lobby)
+    {
+        // validate arguments
+        if (lobby == null)
+        {
+            String msg = "Input lobby is null!";
+            log.error(msg);
+            throw new IllegalArgumentException(msg);
+        }
+        if ((lobby.getPlayers() == null) || (lobby.getPlayers().size() == 0))
+        {
+            String msg = "Cannot create game for lobby that has no players!  ID=" + lobby.getId();
+            log.error(msg);
+            throw new IllegalArgumentException(msg);
+        }
+
+        // create game
+        Game game = new Game();
+        game.setStatus(GameStatusEnum.New);
+
+        List<Player> players = new ArrayList<Player>();
+        for (LobbyPlayer lobbyPlayer : lobby.getPlayers())
+        {
+            Optional<Player> optionalPlayer = playerRepository.findById(lobbyPlayer.getPlayerId());
+            if (!optionalPlayer.isPresent())
+            {
+                String msg = "Lobby contains player ID that is not associated with actual player!  Lobby ID = " + lobby.getId() + " Player ID = " + lobbyPlayer.getPlayerId();
+                log.error(msg);
+                throw new RuntimeException(msg);
+            }
+
+            players.add(optionalPlayer.get());
+        }
+        game.setPlayers(players);
+
+        gameRepository.save(game);
+        return game;
     }
 }

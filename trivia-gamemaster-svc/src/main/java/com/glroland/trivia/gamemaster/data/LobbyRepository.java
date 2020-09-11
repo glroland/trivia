@@ -10,4 +10,6 @@ public interface LobbyRepository extends MongoRepository<Lobby, String> {
 
     @Query(value = "{ 'status' : ?1, 'players.playerId' : ?0 }")
     public List<Lobby> findByPlayerAndStatus(String playerId, LobbyStatusEnum lobbyStatus);
+
+    public List<Lobby> findByStatus(LobbyStatusEnum lobbyStatus);
 }
