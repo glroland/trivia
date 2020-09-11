@@ -9,7 +9,7 @@ public class Game {
     @Id
     private String id;
 
-    private List<Player> players;
+    private List<String> players;
     private Date createDateTime;
     private Date endDate;
     private GameStatusEnum status;
@@ -27,11 +27,11 @@ public class Game {
         this.id = id;
     }
 
-    public List<Player> getPlayers() {
+    public List<String> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(List<String> players) {
         this.players = players;
     }
 

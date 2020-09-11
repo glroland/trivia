@@ -139,10 +139,10 @@ public class TriviaGameMasterController {
         Lobby lobby = null;
 
         // attempt to find
-        List<Lobby> lobbies = lobbyRepository.findByPlayerAndStatus(playerId, LobbyStatusEnum.Open);
+        List<Lobby> lobbies = lobbyRepository.findByStatus(LobbyStatusEnum.Open);
         if ((lobbies == null) || (lobbies.size() == 0))
         {
-            log.info("No matching lobbies found at all.  Creating!");
+            log.info("No open lobbies found.  Creating!");
 
             // no lobby found, so create one
             lobby = new Lobby();
@@ -151,7 +151,7 @@ public class TriviaGameMasterController {
 
             // set expiration time
             Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.MINUTE, 1);
+            cal.add(Calendar.SECOND, 15);
             lobby.setExpireDateTime(cal.getTime());
 
             // add requesting player
@@ -170,10 +170,32 @@ public class TriviaGameMasterController {
 
             // update existing lobby
             lobby = lobbies.get(0);
-            List<LobbyPlayer> players = lobby.getPlayers();
-            for (int i=0; i<players.size(); i++)
+            log.info("Updating First Lobby in Sequence: LobbyID = " + lobby.getId());
+
+            List<LobbyPlayer> lobbyPlayers = lobby.getPlayers();
+            boolean found = false;
+            for (LobbyPlayer lobbyPlayer : lobbyPlayers)
             {
-                
+                if (playerId.equals(lobbyPlayer.getPlayerId()))
+                {
+                    log.info("Player was previously registered to lobby - updating check in time!  LobbyID=" + lobby.getId());
+
+                    found = true;
+                    lobbyPlayer.setLastCheckIn(Calendar.getInstance().getTime());
+                    lobbyRepository.save(lobby);
+                }
+            }
+
+            if (!found)
+            {
+                log.info("Adding player to existing lobby.  Lobby ID = " + lobby.getId());
+
+                LobbyPlayer newPlayer = new LobbyPlayer();
+                newPlayer.setLastCheckIn(Calendar.getInstance().getTime());
+                newPlayer.setPlayerId(playerId);
+                lobbyPlayers.add(newPlayer);
+
+                lobbyRepository.save(lobby);
             }
         }
 
@@ -193,9 +215,7 @@ public class TriviaGameMasterController {
             throw new IllegalArgumentException(msg);
         }
 
-        if(log.isDebugEnabled())
-            log.debug("Getting games for Player!  playerID=" + playerId);
-
+        log.info("Getting games for Player!  playerID=" + playerId);
         return gameRepository.findByPlayers(playerId);
     }
 
@@ -204,6 +224,8 @@ public class TriviaGameMasterController {
     @Transactional
     public void clearLobbies()
     {
+        log.info("Clearing Lobbies Task Invoked");
+
         List<Lobby> openLobbies = lobbyRepository.findByStatus(LobbyStatusEnum.Open);
         if (openLobbies != null)
         {
@@ -212,6 +234,7 @@ public class TriviaGameMasterController {
             {
                 if (now.after(openLobby.getExpireDateTime()))
                 {
+                    log.info("Closing expired lobby: " + openLobby.getId());
                     this.closeLobby(openLobby.getId());
                 }
             }
@@ -287,7 +310,7 @@ public class TriviaGameMasterController {
         Game game = new Game();
         game.setStatus(GameStatusEnum.New);
 
-        List<Player> players = new ArrayList<Player>();
+        List<String> players = new ArrayList<String>();
         for (LobbyPlayer lobbyPlayer : lobby.getPlayers())
         {
             Optional<Player> optionalPlayer = playerRepository.findById(lobbyPlayer.getPlayerId());
@@ -298,7 +321,7 @@ public class TriviaGameMasterController {
                 throw new RuntimeException(msg);
             }
 
-            players.add(optionalPlayer.get());
+            players.add(optionalPlayer.get().getId());
         }
         game.setPlayers(players);
 

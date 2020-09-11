@@ -6,5 +6,6 @@ import com.glroland.trivia.gamemaster.entities.Game;
 
 public interface GameRepository extends MongoRepository<Game, String> {
     
+//    @Query(value = "{ 'players.playerId' : ?0 }")
     public List<Game> findByPlayers(String player);
 }
