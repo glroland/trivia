@@ -16,7 +16,6 @@ http://localhost:8080/games?playerId=5f5ae178e613b7625c8d51be
 curl --get "http://localhost:8080/games?playerId=5f5ae178e613b7625c8d51be" | jq
 
 
-
 Dependencies:
 
 MongoDB
