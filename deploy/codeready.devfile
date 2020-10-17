@@ -1,0 +1,166 @@
+metadata:
+  name: codeready-trivia
+projects:
+  - name: trivia
+    source:
+      location: 'https://github.com/glroland/trivia.git'
+      type: git
+      branch: master
+components:
+  - id: redhat/java11/latest
+    type: chePlugin
+  - id: redhat/dependency-analytics/latest
+    type: chePlugin
+  - id: che-incubator/typescript/latest
+    memoryLimit: 512Mi
+    type: chePlugin
+  - id: ms-vscode/node-debug2/latest
+    type: chePlugin
+  - mountSources: true
+    endpoints:
+      - name: question-svc-endpoint
+        port: 8080
+    memoryLimit: 512Mi
+    type: dockerimage
+    volumes:
+      - name: m2
+        containerPath: /home/jboss/.m2
+    image: >-
+      registry.redhat.io/codeready-workspaces/plugin-java11-rhel8@sha256:e9deebbc320d28a2f425e858ed3dcf87fc67a40f6654d6eb7c2b6feea022b7d6
+    alias: question-svc
+    env:
+      - value: >-
+          -XX:MaxRAMPercentage=50.0 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
+          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
+          -Xms20m -Djava.security.egd=file:/dev/./urandom
+          -Duser.home=/home/jboss
+        name: JAVA_OPTS
+      - value: $(JAVA_OPTS)
+        name: MAVEN_OPTS
+  - mountSources: true
+    endpoints:
+      - name: gamemaster-svc-endpoint
+        port: 8080
+    memoryLimit: 512Mi
+    type: dockerimage
+    volumes:
+      - name: m2
+        containerPath: /home/jboss/.m2
+    image: >-
+      registry.redhat.io/codeready-workspaces/plugin-java11-rhel8@sha256:e9deebbc320d28a2f425e858ed3dcf87fc67a40f6654d6eb7c2b6feea022b7d6
+    alias: gamemaster-svc
+    env:
+      - value: >-
+          -XX:MaxRAMPercentage=50.0 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
+          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
+          -Xms20m -Djava.security.egd=file:/dev/./urandom
+          -Duser.home=/home/jboss
+        name: JAVA_OPTS
+      - value: $(JAVA_OPTS)
+        name: MAVEN_OPTS
+  - mountSources: true
+    endpoints:
+      - name: trivia-app
+        port: 3000
+    memoryLimit: 512Mi
+    type: dockerimage
+    image: >-
+      registry.redhat.io/codeready-workspaces/plugin-java8-rhel8@sha256:d04f70c8340abaee1a282b77158d054f4faf2225bc17c79aafb413396c367782
+    alias: trivia-app
+    env:
+      - value: 220fd770-c028-480d-8f95-f84353c7d55a
+        name: SECRET
+      - value: production
+        name: NODE_ENV
+  - endpoints:
+      - name: mongodb
+        port: 27017
+        attributes:
+          discoverable: 'true'
+          public: 'false'
+    memoryLimit: 512Mi
+    type: dockerimage
+    volumes:
+      - name: mongo-storage
+        containerPath: /var/lib/mongodb/data
+    image: >-
+      registry.redhat.io/rhscl/mongodb-36-rhel7@sha256:9f799d356d7d2e442bde9d401b720600fd9059a3d8eefea6f3b2ffa721c0dc73
+    alias: mongo
+    env:
+      - value: user
+        name: MONGODB_USER
+      - value: password
+        name: MONGODB_PASSWORD
+      - value: guestbook
+        name: MONGODB_DATABASE
+      - value: password
+        name: MONGODB_ADMIN_PASSWORD
+apiVersion: 1.0.0
+commands:
+  - name: 1. Build question-svc
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/trivia/trivia-question-svc'
+        type: exec
+        command: mvn clean install
+        component: question-svc
+  - name: 2. Run question-svc
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/trivia/trivia-question-svc'
+        type: exec
+        command: 'mvn spring-boot:run'
+        component: question-svc
+  - name: 1. Build gamemaster-svc
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/trivia/trivia-gamemaster-svc'
+        type: exec
+        command: mvn clean install
+        component: gamemaster-svc
+  - name: 2. Run gamemaster-svc
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/trivia/trivia-gamemaster-svc'
+        type: exec
+        command: 'mvn spring-boot:run'
+        component: gamemaster-svc
+  - name: 1. Run trivia-app
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/trivia/trivia-app'
+        type: exec
+        command: npm start
+        component: trivia-app
+  - name: 5. Log into deployment cluster
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/vertx-health-checks-example-redhat'
+        type: exec
+        command: |
+          echo
+          echo "Before you can deploy this application to an openshift cluster,"
+          echo "you must run 'oc login ...' in the maven terminal."
+          echo
+        component: gamemaster-svc
+  - name: 6. Deploy to OpenShift
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/vertx-health-checks-example-redhat'
+        type: exec
+        command: >-
+          mvn fabric8:deploy -Popenshift -DskipTests
+          -Dvertx.disableDnsResolver=true
+        component: gamemaster-svc
+  - name: Attach remote debugger
+    actions:
+      - referenceContent: |
+          {
+          "version": "0.2.0",
+          "configurations": [
+          {
+              "type": "java",
+              "request": "attach",
+              "name": "Debug (Attach)",
+              "hostName": "localhost",
+              "port": 5005
+          }
+          ]
+          }
+        type: vscode-launch
+

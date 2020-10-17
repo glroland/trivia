@@ -1,17 +1,8 @@
 import React from 'react';
-import './App.css';
-import PracticeGame from './game/PracticeGame.js';
+import Dashboard from './Dashboard';
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <div>
-          <PracticeGame />
-        </div>
-      </header>
-    </div>
+        <Dashboard />
   );
 }
-
-export default App;
