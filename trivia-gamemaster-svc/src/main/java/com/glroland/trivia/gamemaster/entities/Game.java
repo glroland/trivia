@@ -8,7 +8,7 @@ public class Game {
     
     @Id
     private String id;
-
+    
     private List<String> players;
     private Date createDateTime;
     private Date endDate;
