@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  application.properties: |
+    spring.data.mongodb.host=mongodb
+    spring.data.mongodb.database=triviadb
+    spring.data.mongodb.username=trivia
+    spring.data.mongodb.password=triviapw
+    spring.data.mongodb.port=27017
+kind: ConfigMap
+metadata:
+  name: gamemaster-app-config

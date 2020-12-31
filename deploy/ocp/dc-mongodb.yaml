@@ -32,7 +32,7 @@ spec:
         - name: MONGODB_ADMIN_PASSWORD
           value: triviaadmin
         - name: MONGODB_DATABASE
-          value: trivia
+          value: triviadb
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
