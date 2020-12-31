@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   annotations:
     alpha.image.policy.openshift.io/resolve-names: '*'
-    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"question-svc"},{"apiVersion":"apps/v1","kind":"Deployment","name":"svc"}]'
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"question-svc"},{"apiVersion":"apps/v1","kind":"Deployment","name":"svc"},{"apiVersion":"apps/v1","kind":"Deployment","name":"gamemaster-svc"}]'
     app.openshift.io/vcs-ref: master
     app.openshift.io/vcs-uri: https://github.com/glroland/trivia.git
     deployment.kubernetes.io/revision: "5"

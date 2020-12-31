@@ -1,0 +1,44 @@
+apiVersion: v1
+data:
+  database-admin-password: YmZ0cGlsdzJWc0Z5Y1llNw==
+  database-name: dHJpdmlhZGI=
+  database-password: cGFzc3dvcmQ=
+  database-user: dHJpdmlhdXNlcg==
+kind: Secret
+metadata:
+  annotations:
+    template.openshift.io/expose-admin_password: '{.data[''database-admin-password'']}'
+    template.openshift.io/expose-database_name: '{.data[''database-name'']}'
+    template.openshift.io/expose-password: '{.data[''database-password'']}'
+    template.openshift.io/expose-username: '{.data[''database-user'']}'
+  labels:
+    template: mongodb-persistent-template
+    template.openshift.io/template-instance-owner: aeeb66c8-3ca0-447a-a89d-5a8d9ec7f06a
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:database-admin-password: {}
+        f:database-name: {}
+        f:database-password: {}
+        f:database-user: {}
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:template.openshift.io/expose-admin_password: {}
+          f:template.openshift.io/expose-database_name: {}
+          f:template.openshift.io/expose-password: {}
+          f:template.openshift.io/expose-username: {}
+        f:labels:
+          .: {}
+          f:template: {}
+          f:template.openshift.io/template-instance-owner: {}
+      f:type: {}
+    manager: openshift-controller-manager
+    operation: Update
+  name: mongodb
+  namespace: trivia
+  selfLink: /api/v1/namespaces/trivia/secrets/mongodb
+type: Opaque
