@@ -8,7 +8,6 @@ metadata:
     deployment.kubernetes.io/revision: "3"
     image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"gamemaster-svc:latest","namespace":"trivia"},"fieldPath":"spec.template.spec.containers[?(@.name==\"gamemaster-svc\")].image","pause":"false"}]'
     openshift.io/generated-by: OpenShiftWebConsole
-  generation: 3
   labels:
     app: gamemaster-svc
     app.kubernetes.io/component: gamemaster-svc

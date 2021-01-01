@@ -5,46 +5,11 @@ metadata:
     app.openshift.io/vcs-ref: master
     app.openshift.io/vcs-uri: https://github.com/glroland/trivia.git
     openshift.io/generated-by: OpenShiftWebConsole
-  creationTimestamp: "2020-10-25T23:09:19Z"
   labels:
     app: question-svc
     app.kubernetes.io/component: question-svc
     app.kubernetes.io/instance: question-svc
     app.kubernetes.io/part-of: trivia
-  managedFields:
-  - apiVersion: v1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:metadata:
-        f:annotations:
-          .: {}
-          f:app.openshift.io/vcs-ref: {}
-          f:app.openshift.io/vcs-uri: {}
-          f:openshift.io/generated-by: {}
-        f:labels:
-          .: {}
-          f:app: {}
-          f:app.kubernetes.io/component: {}
-          f:app.kubernetes.io/instance: {}
-          f:app.kubernetes.io/part-of: {}
-      f:spec:
-        f:ports:
-          .: {}
-          k:{"port":8080,"protocol":"TCP"}:
-            .: {}
-            f:name: {}
-            f:port: {}
-            f:protocol: {}
-            f:targetPort: {}
-        f:selector:
-          .: {}
-          f:app: {}
-          f:deploymentconfig: {}
-        f:sessionAffinity: {}
-        f:type: {}
-    manager: Mozilla
-    operation: Update
-    time: "2020-10-25T23:09:19Z"
   name: question-svc
 spec:
   ports:

@@ -3,7 +3,6 @@ kind: Route
 metadata:
   annotations:
     openshift.io/host.generated: "true"
-  creationTimestamp: "2020-12-30T02:22:53Z"
   labels:
     app: gamemaster-svc
     app.kubernetes.io/component: gamemaster-svc
@@ -12,41 +11,7 @@ metadata:
     app.kubernetes.io/part-of: trivia
     app.openshift.io/runtime: java
     app.openshift.io/runtime-version: openjdk-11-el7
-  managedFields:
-  - apiVersion: route.openshift.io/v1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:metadata:
-        f:labels:
-          .: {}
-          f:app: {}
-          f:app.kubernetes.io/component: {}
-          f:app.kubernetes.io/instance: {}
-          f:app.kubernetes.io/name: {}
-          f:app.kubernetes.io/part-of: {}
-          f:app.openshift.io/runtime: {}
-          f:app.openshift.io/runtime-version: {}
-      f:spec:
-        f:port:
-          .: {}
-          f:targetPort: {}
-        f:to:
-          f:kind: {}
-          f:name: {}
-          f:weight: {}
-        f:wildcardPolicy: {}
-    manager: Mozilla
-    operation: Update
-  - apiVersion: route.openshift.io/v1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:status:
-        f:ingress: {}
-    manager: openshift-router
-    operation: Update
   name: gamemaster-svc
-  namespace: trivia
-  selfLink: /apis/route.openshift.io/v1/namespaces/trivia/routes/gamemaster-svc
 spec:
   port:
     targetPort: 8080-tcp

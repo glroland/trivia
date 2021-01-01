@@ -13,58 +13,6 @@ metadata:
     app.kubernetes.io/part-of: trivia
     app.openshift.io/runtime: java
     app.openshift.io/runtime-version: openjdk-11-el7
-  managedFields:
-  - apiVersion: build.openshift.io/v1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:metadata:
-        f:annotations:
-          .: {}
-          f:app.openshift.io/vcs-ref: {}
-          f:app.openshift.io/vcs-uri: {}
-          f:openshift.io/generated-by: {}
-        f:labels:
-          .: {}
-          f:app: {}
-          f:app.kubernetes.io/component: {}
-          f:app.kubernetes.io/instance: {}
-          f:app.kubernetes.io/name: {}
-          f:app.kubernetes.io/part-of: {}
-          f:app.openshift.io/runtime: {}
-          f:app.openshift.io/runtime-version: {}
-      f:spec:
-        f:output:
-          f:to:
-            .: {}
-            f:kind: {}
-            f:name: {}
-        f:runPolicy: {}
-        f:source:
-          f:contextDir: {}
-          f:git:
-            .: {}
-            f:uri: {}
-          f:type: {}
-        f:strategy:
-          f:sourceStrategy:
-            .: {}
-            f:from:
-              .: {}
-              f:kind: {}
-              f:name: {}
-              f:namespace: {}
-          f:type: {}
-    manager: Mozilla
-    operation: Update
-  - apiVersion: build.openshift.io/v1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:spec:
-        f:triggers: {}
-      f:status:
-        f:lastVersion: {}
-    manager: openshift-apiserver
-    operation: Update
   name: question-svc
   namespace: trivia
 spec:

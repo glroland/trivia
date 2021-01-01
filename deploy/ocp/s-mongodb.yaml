@@ -14,31 +14,5 @@ metadata:
   labels:
     template: mongodb-persistent-template
     template.openshift.io/template-instance-owner: aeeb66c8-3ca0-447a-a89d-5a8d9ec7f06a
-  managedFields:
-  - apiVersion: v1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:data:
-        .: {}
-        f:database-admin-password: {}
-        f:database-name: {}
-        f:database-password: {}
-        f:database-user: {}
-      f:metadata:
-        f:annotations:
-          .: {}
-          f:template.openshift.io/expose-admin_password: {}
-          f:template.openshift.io/expose-database_name: {}
-          f:template.openshift.io/expose-password: {}
-          f:template.openshift.io/expose-username: {}
-        f:labels:
-          .: {}
-          f:template: {}
-          f:template.openshift.io/template-instance-owner: {}
-      f:type: {}
-    manager: openshift-controller-manager
-    operation: Update
   name: mongodb
-  namespace: trivia
-  selfLink: /api/v1/namespaces/trivia/secrets/mongodb
 type: Opaque
