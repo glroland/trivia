@@ -21,6 +21,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import GamePage from './GamePage';
 import RegisterPage from './RegisterPage';
+import {playerContext} from './playerContext';
 
 function Copyright() {
   return (
