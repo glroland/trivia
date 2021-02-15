@@ -3,14 +3,20 @@ package com.glroland.trivia.gamemaster.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.glroland.trivia.gamemaster.entities.Player;
@@ -37,10 +43,15 @@ public class TriviaGameMasterController {
     @Autowired
     private LobbyRepository lobbyRepository;
 
-    @GetMapping("/purge")
+//    @GetMapping(value = "/")
+//    public void redirect(HttpServletResponse response) throws IOException {
+//        response.sendRedirect("/swagger-ui/");
+//    }
+
+    @DeleteMapping("/all")
     @CrossOrigin(origins = "*")
     @Transactional
-    public void purge()
+    public void deleteAll()
     {
         log.warn("Purging all managed types from databases.  Fun times!");
         gameRepository.deleteAll();
@@ -48,7 +59,7 @@ public class TriviaGameMasterController {
         playerRepository.deleteAll();
     }
 
-    @GetMapping("/signin")
+    @PostMapping("/signin")
     @CrossOrigin(origins = "*")
     @Transactional
     public String signin(String name, String email)
@@ -113,10 +124,10 @@ public class TriviaGameMasterController {
         return player.getId();
     }
 
-    @GetMapping("/lobby")
+    @PostMapping("/enterLobby")
     @CrossOrigin(origins = "*")
     @Transactional
-    public Lobby updateLobby(String playerId)
+    public Lobby enterLobby(String playerId)
     {
         // validate arguments
         if ((playerId == null) || (playerId.length() == 0))
@@ -219,10 +230,10 @@ public class TriviaGameMasterController {
         return gameRepository.findByPlayers(playerId);
     }
 
-    @GetMapping("/clearLobbies")
+    @DeleteMapping("/lobbies")
     @CrossOrigin(origins = "*")
     @Transactional
-    public void clearLobbies()
+    public void deleteLobbies()
     {
         log.info("Clearing Lobbies Task Invoked");
 
@@ -241,7 +252,7 @@ public class TriviaGameMasterController {
         }
     }
 
-    @GetMapping("/closeLobby")
+    @DeleteMapping("/lobby")
     @CrossOrigin(origins = "*")
     @Transactional
     public void closeLobby(String lobbyId)
