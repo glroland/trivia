@@ -26,3 +26,6 @@ mongod --config /usr/local/etc/mongod.conf
 brew services start mongodb-community@4.4
 brew services stop mongodb-community@4.4
 
+~/Library/LaunchAgents/homebrew.mxcl.mongodb-community.plist
+
+
