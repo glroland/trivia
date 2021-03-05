@@ -22,3 +22,7 @@ MongoDB
 Local install instructions for Mac
 https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/
 mongod --config /usr/local/etc/mongod.conf
+
+brew services start mongodb-community@4.4
+brew services stop mongodb-community@4.4
+
